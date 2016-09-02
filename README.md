@@ -77,10 +77,15 @@ Kod Support Vector Machines alogritma, procenat tačnosti je daleko bolji u odno
 Detaljni rezultati za svaki od klasifikatora mogu se naći u fajlovima [BayesResults.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/BayesResults.txt), [J48Results.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/J48Results.txt),[SupportVectorMachineResults.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/SupportVectorMachineResults.txt)
 #Reference
 [1] Jose Maria Gomez blog, link: http://jmgomezhidalgo.blogspot.rs/2013/05/language-identification-as-text.html, datum pristupa: 2.9.2016.
+<br>
 [2] Stanford materijal, link: https://web.stanford.edu/class/cs124/lec/naivebayes.pdf, datum pristupa: 2.9.2016.
+<br>
 [3] FON materijal, laboratorija za veštačku inteligenciju, link: http://ai.fon.bg.ac.rs/wp-content/uploads/2015/04/Klasifikacija-osnove-2015.pdf, datum pristupa: 2.9.2016.
+<br>
 Dodatna literatura:
+<br>
 [4] Rad na temu analize sentimenta tviter poruka, link: http://s3.eddieoz.com/docs/sentiment_analysis/Twitter_Sentiment_Classification_using_Distant_Supervision.pdf, datum pristupa 2.9.2016.
+<br>
 [5] FON materijal, laboratorija za veštačku inteligenciju, link:http://ai.fon.bg.ac.rs/wp-content/uploads/2015/04/WekaTextMining2015.zip, datum pristupa 2.9.2016.
 
 
