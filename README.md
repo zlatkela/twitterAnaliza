@@ -7,7 +7,7 @@ Skup podataka koji se koristio u ovom projektu prikupljan je sa [Twitter Streami
 tačno 120 sati. Podaci su skupljani po dva kriterijuma, i to da su tvitovi 
 na srpskom jeziku i da sadrže srećan ili tužan smajli. Na osnovu smajlija, svaki tvit je klasifikovan kao pozitivan ili negativan. 
 Za skup podataka koji je od interesa za aplikaciju uzeto je po 400 tvitova sa pozitivnim i negativnim sentimentom
-i nad njima je vršena analiza. Takođe, izvršena je normalizacija nad delovima tvita koji predstavljaju korisničko ime ili link. Umesto tih reči korišćene su reči USERNAME i URL. Nad podacima je primenjen StringToWordVector filter, koji služi da originalan tekst prevede u reči (zavisno od tokena), na osnovu kojih se kasnije vrši klasifikacija. Prikaz dela arff fajla(tip fajla koji koristi [Weka](http://www.cs.waikato.ac.nz/ml/weka/) biblioteka) može se videti ovde:
+i nad njima je vršena analiza. Takođe, izvršena je normalizacija nad delovima tvita koji predstavljaju korisničko ime ili link. Umesto tih reči korišćene su reči USERNAME i URL. Nad podacima je primenjen StringToWordVector filter, koji služi da originalan tekst prevede u reči (zavisno od tokena), na osnovu kojih se kasnije vrši klasifikacija. Prikaz dela [arff](http://www.cs.waikato.ac.nz/ml/weka/arff.html) fajla(tip fajla koji koristi [Weka](http://www.cs.waikato.ac.nz/ml/weka/) biblioteka) može se videti ovde:
 ```
 @relation selectedData
 
