@@ -1,9 +1,0 @@
-@relation processedData
-
-@attribute tweet STRING
-@attribute sentiment {positive, negative}
-
-@data
-Nema karadjordjeve snicle!  #fail #skupstina URL , negative
-zasto je micun prekinuo #skupstina ? taman sam otkazao sve planove do nedelje  , negative
-crna i jadna Srbija. Nije cudo sto ce da nestane, kad vecina glasa za ovakve mamlaze Martinovica, Djukanovica i Arsica  #skupstina , negative
