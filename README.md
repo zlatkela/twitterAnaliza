@@ -3,7 +3,7 @@ Cilj ovog projekta je upoređivanje performansi različitih klasifikatora u konk
 konkretno za klasifikaciju sentimenta poruka sa Twitter servisa (tvitova) na srpskom jeziku. Sentiment tvita može biti pozitivan ili negativan, što se određuje na osnovu smajlija u samom tvitu. Na osnovu ovoga može se zaključiti da su od interesa za ovaj projekat bili samo tvitovi koji sadrže smajli.
 # Podaci
 Skup podataka koji se koristio u ovom projektu prikupljan je sa [Twitter Streaming APi-ja](https://dev.twitter.com/streaming/overview), u periodu od 25.08.2016. do 30.08.2016. tj. tačno 120 sati. Podaci su skupljani po dva kriterijuma, i to da su tvitovi 
-na srpskom jeziku i da sadrže srećan (":)", ":-)", ":D", ":-D") ili tužan smajli (":(", ":-("). Na osnovu smajlija, svaki tvit je klasifikovan kao pozitivan ili negativan. Za skup podataka koji je od interesa za aplikaciju uzeto je po 400 tvitova sa pozitivnim i negativnim sentimentom i nad njima je vršena analiza. Takođe, izvršena je normalizacija nad delovima tvita koji predstavljaju korisničko ime ili link. Umesto tih reči korišćene su reči USERNAME i URL. Nad podacima je primenjen StringToWordVector filter, koji služi da originalan tekst prevede u reči (zavisno od tokena), na osnovu kojih se kasnije vrši klasifikacija. Prikaz dela [arff](http://www.cs.waikato.ac.nz/ml/weka/arff.html) fajla (tip fajla koji koristi [Weka](http://www.cs.waikato.ac.nz/ml/weka/) biblioteka) može se videti u Listingu 1.
+na srpskom jeziku i da sadrže srećan (":)", ":-)", ":D", ":-D") ili tužan smajli (":(", ":-("). Na osnovu smajlija, svaki tvit je klasifikovan kao pozitivan ili negativan. Za skup podataka koji je od interesa za aplikaciju uzeto je po 400 tvitova sa pozitivnim i negativnim sentimentom i nad njima je vršena analiza. Podaci su podeljeni u 3 grupe: podaci za trening, podaci za validaciju i podaci za testiranje, gde prva grupa zauzima 60% svih podataka, a druge dve po 20%. Takođe, izvršena je normalizacija nad delovima tvita koji predstavljaju korisničko ime ili link. Umesto tih reči korišćene su reči USERNAME i URL. Nad podacima je primenjen StringToWordVector filter, koji služi da originalan tekst prevede u reči (zavisno od tokena), na osnovu kojih se kasnije vrši klasifikacija. Prikaz dela [arff](http://www.cs.waikato.ac.nz/ml/weka/arff.html) fajla (tip fajla koji koristi [Weka](http://www.cs.waikato.ac.nz/ml/weka/) biblioteka) može se videti u Listingu 1.
 ```
 @relation selectedData
 
@@ -54,6 +54,9 @@ Implementacija projekta rađena je u [Java](https://www.java.com/en/) programsko
 # Analiza
 Za analizu rezultata klasifikatora koristi se više veličina koje opisuju rezultate same klasifikacije.
 
+## Validacija
+Validacija modela vrši se metodom unakrsne validacije. Ova metoda funkcioniše tako što se skup podataka podeli na N jednakih delova, gde jedan deo predstavlja podatke za testiranje, a ostalih N-1 podatke za trening. Validacija se vrši za svaki od N delova, i na kraju se računaju prosečni rezultati. U našem slučaju, skup podataka je deljen na 10 delova, a rezultati validacije dati su u sledećim fajlovima: [BayesValidation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/BayesValidation.txt), [J48Validation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/J48Validation.txt),[SupportVectorMachinesValidation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/SupportVectorMachineValidation.txt)
+
 ## Tačnost
 Tačnost (Accuracy) predstavlja procenat slučajeva (instanci) koji su uspešno (korektno) klasifikovani.[3] Računa se kao količnik sume svih korektno klasifikovanih instanci i ukupnog broja instanci. Jedan od preduslova za korišćenje ove mere je ujednačena količina podataka svih klasa u skupu podataka. Kako korišćeni skup podataka sadrži po 400 instanci za tvitove sa pozitivnim i negativnim sentimentom, ova mera uspešnosti klasifikatora jeste merodavna.
 
@@ -68,19 +71,19 @@ U sledećoj tabeli dat je uporedni prikaz rezultata navedenih mera za korišćen
 
 |Klasifikator|Tačnost|F-mera|Površina ispod ROC krive|
 |------------|-------|------|------------------------|
-|Naive Bayes|70.125%|0.696|0.771|
-|J48|76.75%|0.773|0.827|
-|SVM|99.875%|0.999|0.999|
+|Naive Bayes|62.5%|0.643|0.665|
+|J48|63.75%|0.681|0.635|
+|SVM|60.625%|0.604|0.607|
 
-Iz priloženog se može videti da je odnos svih mera isti, tj. da je po svim merama redosled uspešnosti algoritama isti. Najslabije rezultate ima Naive Bayes klasifikator, koji ima procenat uspešnosti od 70.125%. Ipak, površina ispod ROC krive iznosi 0.771 što ovaj klasifikator svrstava u grupu prihvatljivih. Takođe, treba uzeti u obzir i da je skup podataka mali i da Naive Bayes alogritam daje najbolje rezultate na problemima srednje veličine, kao i da je za očekivati da bi na većem uzorku ovaj algoritam imao bolje rezultate.
+Iz priloženog se može videti da su rezultati svih klasifikatora nezadovoljavajući. Nijedan pd klasifikatora nema veću uspešnost od 64%. Najslabije rezultate ima SVM klasifikator, koji ima procenat uspešnosti od 60,625%. I ostali parametri su u skladu sa tim, te ovaj algoritam nije pouzdan kao klasifikator tvitova. Jedna zanimljivost vezana za ovaj algoritam je da je pri testiranju sa  podacima iz skupa podataka za trenining imao procenat uspešnosti 99%, što pokazuje da je ovakav model sklon overfittingu, situaciji u kojoj algoritam pokazuje sjajne rezultate nad podacima nad kojima je i treniran, ali na drugačijem skupu podataka procenat uspešnosti klasifikatora značajno pada. Vredi napomenuti i da je prilikom validacije ovaj algoritam imao najslabije rezultate (tačnost 47.5%).
 
-Što se J48 algoritma tiče, rezultati su bolji nego kod Naive Bayes metode, ali i ovde je procenat uspešnosti algoritma manji od 80%, tačnije iznosi 76.75%. Najveća razlika između ova dva kriterijuma je u F-meri, što znači da ovaj J48 metoda ima bolju kombinaciju preciznosti i odziva nego Naive Bayes. Kako se površina ispod ROC krive nalazi između vrednosti 0.8 i 0.9, ovaj algoritam se svrstava u jako dobre klasifikatore.
+Naive Bayes klasifikator ima nešto veći procenat uspešnosti ali je i to na nezadovoljavajućem nivou. Ono što je zanimljivo je da ovaj algoritam ima najveću ROC vrednost, što pokazuje da je ovaj algoritam primenjiv na probleme binarne klasifikacije. Takođe, treba uzeti u obzir i da je skup podataka mali i da Naive Bayes alogritam daje najbolje rezultate na problemima srednje veličine, kao i da je za očekivati da bi na većem uzorku ovaj algoritam imao bolje rezultate.
 
-Kod Support Vector Machines alogritma, procenat tačnosti je daleko bolji u odnosu na prva dva algoritma i iznosi 99,875%, što znači da je od 800 instanci algoritam samo jednu pogrešno klasifikovao. Ovakvi rezultati i jesu očekivani s obzirom na sposobnost ovog algoritma da najveću težinu dodeli najrelevantnijim podacima. Ipak, ovde treba uzeti u obzir i mogućnost problema overfitting-a, situacije u kojoj algoritam pokazuje sjajne rezultate nad podacima nad kojima je i treniran, ali na drugačijem skupu podataka procenat uspešnosti klasifikatora značajno pada. 
+Što se J48 algoritma tiče, rezultati su najbolji, ali i dalje na niskom nivou. Značajnija razlika između klasifikatora izražena je u F meri, što znači da ovaj algoritam ima bolju kombinaciju preciznosti i odziva od druga dva.
 
-Po prikazanim rezultatima može se zaključiti da je najbolji klasifikator upravo SVM, uz napomenu da je potrebno testirati algoritme na više različitih grupa skupova podataka, što u ovom radu nije bilo moguće zbog nedostatka samih podataka.
+Po prikazanim rezultatima može se zaključiti da je najbolji klasifikator J48, ali da nijedan klasifikator nije dostigao nivo uspešnosti potreban za prelaznu ocenu. Najveći uzrok tome je mala količina podataka koju je bilo moguće prikupiti. U prilog ovome ide i činjenica da su rezultati pri testiranju bolji nego pri validaciji, a pošto je skup podatak za učenje pri validaciji manji, može se uspostaviti korelacija između ova dva.
 
-Detaljni rezultati za svaki od klasifikatora mogu se naći u fajlovima [BayesResults.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/BayesResults.txt), [J48Results.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/J48Results.txt),[SupportVectorMachineResults.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/SupportVectorMachineResults.txt)
+Detaljni rezultati za svaki od klasifikatora mogu se naći u fajlovima [BayesResults.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/BayesResults.txt), [J48Results.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/J48Results.txt),[SupportVectorMachineResults.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/SupportVectorMachinesResults.txt)
 
 #Reference
 [1] Jose Maria Gomez blog, link: http://jmgomezhidalgo.blogspot.rs/2013/05/language-identification-as-text.html, datum pristupa: 2.9.2016.
