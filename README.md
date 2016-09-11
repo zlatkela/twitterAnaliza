@@ -1,9 +1,9 @@
 # O projektu
-Cilj ovog projekta je upoređivanje performansi različitih klasifikatora u konktekstu analize teksta,
-konkretno za klasifikaciju sentimenta poruka sa Twitter servisa (tvitova) na srpskom jeziku. Sentiment tvita može biti pozitivan ili negativan, što se određuje na osnovu smajlija u samom tvitu. Na osnovu ovoga može se zaključiti da su od interesa za ovaj projekat bili samo tvitovi koji sadrže smajli.
+Cilj ovog projekta je upoređivanje performansi različitih klasifikatora u konktekstu analize teksta, konkretno za klasifikaciju sentimenta poruka sa Twitter servisa (tvitova) na srpskom jeziku. Sentiment tvita može biti pozitivan ili negativan, na čije postojanje ukazuje postojanje emotikona u samom tvitu. Na osnovu ovoga može se zaključiti da su od interesa za ovaj projekat bili samo tvitovi koji sadrže emotikone.
+
 # Podaci
-Skup podataka koji se koristio u ovom projektu prikupljan je sa [Twitter Streaming APi-ja](https://dev.twitter.com/streaming/overview), u periodu od 25.08.2016. do 30.08.2016. tj. tačno 120 sati. Podaci su skupljani po dva kriterijuma, i to da su tvitovi 
-na srpskom jeziku i da sadrže srećan (":)", ":-)", ":D", ":-D") ili tužan smajli (":(", ":-("). Na osnovu smajlija, svaki tvit je klasifikovan kao pozitivan ili negativan. Za skup podataka koji je od interesa za aplikaciju uzeto je po 400 tvitova sa pozitivnim i negativnim sentimentom i nad njima je vršena analiza. Podaci su podeljeni u 3 grupe: podaci za trening, podaci za validaciju i podaci za testiranje, gde prva grupa zauzima 60% svih podataka, a druge dve po 20%. Takođe, izvršena je normalizacija nad delovima tvita koji predstavljaju korisničko ime ili link. Umesto tih reči korišćene su reči USERNAME i URL. Nad podacima je primenjen StringToWordVector filter, koji služi da originalan tekst prevede u reči (zavisno od tokena), na osnovu kojih se kasnije vrši klasifikacija. Prikaz dela [arff](http://www.cs.waikato.ac.nz/ml/weka/arff.html) fajla (tip fajla koji koristi [Weka](http://www.cs.waikato.ac.nz/ml/weka/) biblioteka) može se videti u Listingu 1.
+Skup podataka koji se koristio u ovom projektu prikupljan je sa [Twitter Streaming APi-ja](https://dev.twitter.com/streaming/overview), u periodu od 25.08.2016. do 30.08.2016. tj. tačno 120 sati. Podaci su skupljani po dva kriterijuma: da su tvitovi 
+na srpskom jeziku i da sadrže srećan (":)", ":-)", ":D", ":-D") ili tužan emotikon (":(", ":-("). Na osnovu emotikona, svaki tvit je klasifikovan kao pozitivan ili negativan. Takođe, izvršena je normalizacija nad delovima tvita koji predstavljaju korisničko ime ili link. Umesto tih reči korišćene su reči USERNAME i URL. Nad podacima je primenjen StringToWordVector filter, koji služi da originalan tekst prevede u reči (zavisno od tokena), na osnovu kojih se kasnije vrši klasifikacija. Prikaz dela [arff](http://www.cs.waikato.ac.nz/ml/weka/arff.html) fajla (tip fajla koji koristi [Weka](http://www.cs.waikato.ac.nz/ml/weka/) biblioteka) može se videti u Listingu 1.
 ```
 @relation selectedData
 
@@ -33,16 +33,19 @@ na srpskom jeziku i da sadrže srećan (":)", ":-)", ":D", ":-D") ili tužan sma
 'USERNAME Хвала на препоруци  Водио сам је у Топчидерски парк па је јахала и понија и великог коња  ', positive
 '3 литра спирта  ', positive
 ```
-Listing 1 - Prikaz dela normalizovanih podataka  
+Listing 1 - Prikaz dela normalizovanih podataka
+
+Za skup podataka koji je od interesa za aplikaciju uzeto je po 400 tvitova sa pozitivnim i negativnim sentimentom i nad njima je vršena analiza. Podaci su podeljeni u 3 grupe: podaci za trening, podaci za validaciju i podaci za testiranje, gde prva grupa zauzima 60% svih podataka, a druge dve po 20%.
 
 # Algoritmi za klasifikaciju
+
 U projektu su korišćene tri različita algoritma: Naive Bayes, J48 i Support Vector Machines (SVM).
+
 ## Naive Bayes
 Naive Bayes metoda zasnovana je na Bajesovoj teoriji verovatnoće. Jedan od razloga zašto je ova metoda izabrana je taj što iako prosta, ova metoda je brza, sa dobrim rezultatima na problemima srednje veličine vezanim za klasifikaciju na osnovu teksta.[1] Bayes metoda funkcioniše tako što posmatra tekst kao skup reči i na osnovu njih određuje verovatnoću pripadnosti teksta određenoj klasi [2].
 
 ## J48 
-J48 metoda je implementacija stabla odlučivanja. Razlog odabira ove metode je njena mogućnost uspostavljanja korelacije između više reči.
-Takođe, mogućnost vizuelizacije podataka je jedna od prednosti korišćenja ove metode.[1] 
+J48 metoda je implementacija stabla odlučivanja. Razlog odabira ove metode je njena mogućnost uspostavljanja korelacije između više reči. Takođe, mogućnost vizuelizacije podataka je jedna od prednosti korišćenja ove metode.[1] 
 
 ## Support Vector Machines
 SVM metoda predtstavlja jednu od najuspešnijih metoda u klasifikaciji teksta. Njena najveća prednost je mogućnost da se fokusira na 
@@ -55,7 +58,7 @@ Implementacija projekta rađena je u [Java](https://www.java.com/en/) programsko
 Za analizu rezultata klasifikatora koristi se više veličina koje opisuju rezultate same klasifikacije.
 
 ## Validacija
-Validacija modela vrši se metodom unakrsne validacije. Ova metoda funkcioniše tako što se skup podataka podeli na N jednakih delova, gde jedan deo predstavlja podatke za testiranje, a ostalih N-1 podatke za trening. Validacija se vrši za svaki od N delova, i na kraju se računaju prosečni rezultati. U našem slučaju, skup podataka je deljen na 10 delova, a rezultati validacije dati su u sledećim fajlovima: [BayesValidation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/BayesValidation.txt), [J48Validation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/J48Validation.txt),[SupportVectorMachinesValidation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/SupportVectorMachineValidation.txt)
+Validacija modela vrši se metodom unakrsne validacije. Ova metoda funkcioniše tako što se skup podataka podeli na N jednakih delova, gde jedan deo predstavlja podatke za testiranje, a ostalih N-1 podatke za trening. Validacija se vrši za svaki od N delova i na kraju se računaju prosečni rezultati. U našem slučaju, skup podataka je deljen na 10 delova, a rezultati validacije dati su u sledećim fajlovima: [BayesValidation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/BayesValidation.txt), [J48Validation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/J48Validation.txt),[SupportVectorMachinesValidation.txt](https://github.com/zlatkela/twitterAnaliza/blob/master/SupportVectorMachineValidation.txt)
 
 ## Tačnost
 Tačnost (Accuracy) predstavlja procenat slučajeva (instanci) koji su uspešno (korektno) klasifikovani.[3] Računa se kao količnik sume svih korektno klasifikovanih instanci i ukupnog broja instanci. Jedan od preduslova za korišćenje ove mere je ujednačena količina podataka svih klasa u skupu podataka. Kako korišćeni skup podataka sadrži po 400 instanci za tvitove sa pozitivnim i negativnim sentimentom, ova mera uspešnosti klasifikatora jeste merodavna.
